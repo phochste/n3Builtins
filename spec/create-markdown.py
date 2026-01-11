@@ -3,7 +3,6 @@
 
 # In[598]:
 
-
 import string
 import pandas as pd
 import sparql_dataframe
@@ -11,6 +10,16 @@ from rdflib import Graph
 import rdflib
 import rdflib.plugins.sparql as sparql
 import urllib
+import sys
+import os
+
+if len(sys.argv) != 4:
+    print("Usage: python create-markdown.py <src-directory> <template> <output>")
+    sys.exit(1)
+
+SOURCE_DIRECTORY = sys.argv[1]
+TEMPLATE_FILE    = sys.argv[2]
+OUTPUT_FILE      = sys.argv[3]
 
 # ### organize prefixes
 
@@ -43,7 +52,7 @@ from os.path import join
 g = Graph()
 
 # iterate recursively over all files in the src directory
-files = glob(join('src', '**', '*.n3'), recursive=True)
+files = glob(join(SOURCE_DIRECTORY, '**', '*.n3'), recursive=True)
 try:
     for file in files:
         g += Graph().parse(file, format='n3')
@@ -334,8 +343,8 @@ $RESULT
 # In[607]:
 
 
-template = open('index_TEMPLATE.bs').read()
-with open('index.bs', 'w+') as f:
+template = open(TEMPLATE_FILE).read()
+with open(OUTPUT_FILE, 'w+') as f:
     string = template.replace('{{__CONTENT__}}', md_string)
     f.write(string)
 

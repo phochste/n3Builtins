@@ -10,24 +10,17 @@ The editors’ draft of the specification can also be [read directly](https://w3
 
 These tools are required for testing and development of the documentation:
 
-- Docker with a [Bikeshed](https://github.com/netwerk-digitaal-erfgoed/bikeshed-docker) image
-- Python with modules (hint: `python -m pip install <module>`)
-  - notebook
-  - pandas
-  - sparql_dataframe
-  - urlib3
+- Docker 
+
+Optional:
+
 - [EYE](https://github.com/eyereasoner/eye)
 
 # Makefile
 
-### builtins.n3
-
-- `make valid` : validate all `src/` input files
-- `make builtins` : generate a N3 `builtins.n3` file from `src/` input files
-
 ### index.html
 
-- `make index` : generate a `index.bs` document 
+- `make index` : generate a `index.bs` document from the `src` files
   
 Choose one of:
 
@@ -52,7 +45,6 @@ Edit the `src/*` files and run:
 
 ```
 make valid
-make builtins
 make index
 make web
 ```

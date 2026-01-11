@@ -1,11 +1,6 @@
 help:
 	@echo "Generate HTML from a Bikeshed source document:"
 	@echo
-	@echo " [builtins.n3]"
-	@echo
-	@echo "  make builtins Generate builtins.n3 from src/ input files"
-	@echo "  make valid    Validate builtin examples in src/"
-	@echo
 	@echo " [index.html]"
 	@echo
 	@echo "  make index    Generate index.bs"
@@ -18,7 +13,7 @@ help:
 	@echo 
 
 index:
-	@ ./gen_bs.sh
+	@ docker run --rm --env-file=.env -v `pwd`:/app/run -it hochstenbach/n3builtins-gen_bs:v0.0.1
 	
 spec:
 	@ docker run --rm --platform linux/amd64 -v "`pwd`:/spec" -w /spec netwerkdigitaalerfgoed/bikeshed:1.7.0
@@ -29,8 +24,13 @@ watch:
 web:
 	@ curl -s https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html	
 
-builtins:
-	@ find src -type f -name '*.n3' | paste -s -d ' ' - | xargs eye --nope --quiet --pass > builtins.n3
-
 valid:
 	@ find src -type f -name '*.n3' | xargs -n 1 ./example_tester.sh 
+
+# Only for local development
+
+docker-image:
+	@ docker build . -t hochstenbach/n3builtins-gen_bs:v0.0.1
+
+docker-publish:
+	@ docker push hochstenbach/n3builtins-gen_bs:v0.0.1
