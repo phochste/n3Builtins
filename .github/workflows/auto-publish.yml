@@ -12,8 +12,21 @@ jobs:
     name: Echidna Auto-publish CG-DRAFT test 2
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: w3c/spec-prod@v2
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Generate index.bs
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/spec:/app/run \
+            -e PYTHON_SCRIPT="./run/create-markdown.py"
+            -e SOURCE_DIRECTORY="./run/src" \
+            -e TEMPLATE_FILE="./run/index_TEMPLATE.bs" \
+            -e OUTPUT_FILE="./run/index.bs" \
+            hochstenbach/n3builtins-gen_bs:v0.0.1
+
+      - name: Publish to GitHub Pages
+        uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: bikeshed
           SOURCE: spec/index.bs
