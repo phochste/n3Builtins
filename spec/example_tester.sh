@@ -10,6 +10,10 @@ fi
 OUTFILE=n3.out.$$
 LOGFILE="logs/$(basename ${FILE%.*}.txt)"
 
+if [ ! -d logs ]; then
+    mkdir logs
+fi
+
 eye --quiet --nope --pass example_tester.n3 ${FILE} > ${OUTFILE} 2> ${LOGFILE}
 
 if [ $? -eq 0 ]; then
